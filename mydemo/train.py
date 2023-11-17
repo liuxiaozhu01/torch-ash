@@ -20,7 +20,7 @@ from omegaconf import OmegaConf
 sdf_config = {
     "output_activation": "none",
     "n_neurons": 64,
-    "n_hidden_layers": 1,
+    "n_hidden_layers": 2,
     "sphere_init": True,
     "sphere_init_radius": 0.0,
     "weight_norm": True,
@@ -28,7 +28,7 @@ sdf_config = {
 color_config = {
     "output_activation": "sigmoid",
     "n_neurons": 64,
-    "n_hidden_layers": 1,
+    "n_hidden_layers": 2,
 }
 # convert dict to OmegaConf
 sdf_config = OmegaConf.create(sdf_config)
@@ -80,7 +80,7 @@ if __name__ == "__main__":
     )
     # dilation = 2
     # model.init_field(pcd_path, transform_mat, dilation=dilation)
-    model.grid.gaussian_filter_(7, 1)   # ?
+    # model.grid.gaussian_filter_(7, 1)   # ?
     # mesh = model.marching_cubes()
 
     train_batch_size = args.train_batch_size
@@ -101,8 +101,9 @@ if __name__ == "__main__":
     #     dataset, batch_size=train_batch_size, shuffle=True, device=torch.device("cuda:0")
     # )
 
+    model_params = model.parameters()
     optim = torch.optim.RMSprop(model.parameters(), lr=1e-3)
-    scheduler = torch.optim.lr_scheduler.ExponentialLR(optim, 0.9)
+    scheduler = torch.optim.lr_scheduler.ExponentialLR(optim, 0.99)
 
     # Training
     # depth_loss_fn = ScaleAndShiftInvariantLoss()

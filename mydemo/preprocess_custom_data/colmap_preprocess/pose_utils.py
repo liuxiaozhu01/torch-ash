@@ -57,6 +57,9 @@ def load_colmap_data(realdir):
 def save_poses(basedir, poses, pts3d, perm):
     pts_arr = []
     vis_arr = []
+    
+    threshold = 0.5
+    filtered_pts_arr = []
     for k in pts3d:
         pts_arr.append(pts3d[k].xyz)
         cams = [0] * poses.shape[-1]
@@ -67,9 +70,18 @@ def save_poses(basedir, poses, pts3d, perm):
             cams[ind-1] = 1
         vis_arr.append(cams)
 
+        # filter out points that reprojection error is too large
+        if pts3d[k].error < threshold:
+            filtered_pts_arr.append(pts3d[k].xyz)
+
     pts = np.stack(pts_arr, axis=0)
     pcd = trimesh.PointCloud(pts)
     pcd.export(os.path.join(basedir, 'sparse_points.ply'))
+    # save filtered points
+    print("Reprojection error threshold: ", threshold)
+    filtered_pts = np.stack(filtered_pts_arr, axis=0)
+    filtered_pcd = trimesh.PointCloud(filtered_pts)
+    filtered_pcd.export(os.path.join(basedir, 'sparse_points_interest.ply'))
 
     pts_arr = np.array(pts_arr)
     vis_arr = np.array(vis_arr)

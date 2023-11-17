@@ -143,3 +143,6 @@ runs/
 .ccls-cache/
 logs/
 data/
+
+# vscode
+.vscode/

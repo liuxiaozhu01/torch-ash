@@ -1,0 +1,21 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "purpose": ["debug-in-terminal"],
+            "args": [
+                "--path", "/root/home/workspace/torch-ash/data/dtu_scan24/preprocessed", // "/root/home/dataset/ash-dataset/scene0616_00/samples",
+                "--voxel_size", "0.015",
+            ]
+        }
+    ]
+}

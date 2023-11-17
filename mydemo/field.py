@@ -135,6 +135,7 @@ class ImplicitNetwork(nn.Module):
         pcd_tensor = torch.from_numpy(pcd.vertices).float().to(self.grid.device).reshape(-1, 3).contiguous()
 
         grid_coords, cell_coords, grid_indices, cell_indices = self.grid.spatial_init_(pcd_tensor, dilation=dilation, bidirectional=True)
+        nn.init.uniform_(self.grid.embeddings, -1, 1)
 
     def forward(self, rays_o, rays_d, rays_d_norm, near, far, jitter=None):
         (rays_near, rays_far) = self.grid.ray_find_near_far(

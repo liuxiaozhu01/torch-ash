@@ -129,16 +129,16 @@ class SparseDenseGrid(ASHModule):
             Affected sparse/dense coordinates and indices
         """
         # TODO(wei): optimize for speed if necessary
-        points = self.transform_world_to_cell(points)
+        points = self.transform_world_to_cell(points)   # some points located in the same cell
 
-        grid_coords = torch.floor(points / self.grid_dim).int()
-        grid_coords = self.grids_in_bound(grid_coords)
+        grid_coords = torch.floor(points / self.grid_dim).int() # some celss located in the same grid
+        grid_coords = self.grids_in_bound(grid_coords)  # there are many duplicates in grid_coords
 
         grid_nb_coord_offsets, _ = enumerate_neighbor_coord_offsets(
             self.in_dim, dilation, bidirectional=bidirectional, device=self.device
         )
-        grid_nb_coords = (grid_coords.view(-1, 1, 3) + grid_nb_coord_offsets).view(
-            -1, 3
+        grid_nb_coords = (grid_coords.view(-1, 1, 3) + grid_nb_coord_offsets).view( # get the neighbor grids of these grid_coords
+            -1, 3                                                                   # thus there are many duplicates in grid_nb_coords
         )
 
         # No need to use a huge hash set due to the duplicates
